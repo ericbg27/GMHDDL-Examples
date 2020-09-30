@@ -1,0 +1,478 @@
+{
+  "actors": [
+    {
+      "id": "ab896727-98d5-4ad8-b44e-5b18e8e9a7ca",
+      "text": "M1: Patient Monitoring",
+      "type": "istar.Actor",
+      "x": 22,
+      "y": 128,
+      "nodes": [
+        {
+          "id": "94269d29-acd6-4b93-baec-6834763a998a",
+          "text": "AT7:RaiseAlar m",
+          "type": "istar.Task",
+          "x": 1021,
+          "y": 770
+        },
+        {
+          "id": "dc017184-a7e5-4e3e-a330-d31ddddc4d4b",
+          "text": "AT4:Steriliz eRobot",
+          "type": "istar.Task",
+          "x": 554,
+          "y": 1031
+        },
+        {
+          "id": "67672a79-9368-407c-b815-194c6d03dc6e",
+          "text": "AT1:VisitRo om",
+          "type": "istar.Task",
+          "x": 191,
+          "y": 677
+        },
+        {
+          "id": "c1f9ed63-b6c9-4b6f-852a-31d21eb7abd3",
+          "text": "AT3: CheckI nfectiousDise ase",
+          "type": "istar.Task",
+          "x": 394,
+          "y": 1029
+        },
+        {
+          "id": "ce4a46c4-7760-41e3-b438-a879194f8088",
+          "text": "G1 :VitalSigns Monitoring[G2|G20]",
+          "type": "istar.Goal",
+          "x": 527,
+          "y": 144,
+          "customProperties": {
+            "Controls": "estimated_battery  : Real",
+            "NonCooperative": "True"
+          }
+        },
+        {
+          "id": "f834f34a-9be5-47d2-977b-61c12b804a5c",
+          "text": "G2: CheckPat ientsVitallSign s[G3;G4]",
+          "type": "istar.Goal",
+          "x": 387,
+          "y": 205,
+          "customProperties": {
+            "Periodic": "True",
+            "Period": "120.0",
+            "Assert": "battery_level > estimated_battery",
+            "Monitors": "battery_level  : Real, estimated_battery"
+          }
+        },
+        {
+          "id": "37db8896-ec12-4aa1-ad5f-07ab49dc7ed9",
+          "text": "G3: FetchOcc upiedRooms",
+          "type": "istar.Goal",
+          "x": 281,
+          "y": 295,
+          "customProperties": {
+            "GoalType": "Query",
+            "Controls": "occupied_rooms : Sequence(Room)"
+          }
+        },
+        {
+          "id": "8c9ce9a0-50a5-41ca-9f4e-02818f97f70a",
+          "text": "G4: CollectAll VitalSigns",
+          "type": "istar.Goal",
+          "x": 428,
+          "y": 295
+        },
+        {
+          "id": "d1d517b9-65b4-4843-b8bc-5755477bdbbe",
+          "text": "G6: Plan Path",
+          "type": "istar.Goal",
+          "x": 96,
+          "y": 410,
+          "customProperties": {
+            "GoalType": "Query",
+            "Monitors": "occupied_rooms",
+            "Controls": "path : Sequence(Room)"
+          }
+        },
+        {
+          "id": "998bbef6-4762-40ed-bebd-45c5c3bef057",
+          "text": "G8: Visit Current Room",
+          "type": "istar.Goal",
+          "x": 196,
+          "y": 598,
+          "customProperties": {
+            "Monitors": "current_room"
+          }
+        },
+        {
+          "id": "38bea37c-6be7-42a7-894d-938969114667",
+          "text": "G9: Check Patient Availability",
+          "type": "istar.Goal",
+          "x": 333,
+          "y": 602,
+          "customProperties": {
+            "GoalType": "Patient",
+            "Assert": "current_location == current_room.inside",
+            "SensedProperty": "patient_available : Bool",
+            "Monitors": "current_location : Location,current_room.inside : Location"
+          }
+        },
+        {
+          "id": "a75c534c-cd3e-4649-829c-670045531a69",
+          "text": "G10: Approach Patient",
+          "type": "istar.Goal",
+          "x": 471,
+          "y": 604,
+          "customProperties": {
+            "Assert": "patient_available == True",
+            "Monitors": "patient_available,current_room"
+          }
+        },
+        {
+          "id": "ae5f2f70-5107-40f3-9b47-7d173255f172",
+          "text": "AT2: Approa chPatient",
+          "type": "istar.Task",
+          "x": 467,
+          "y": 700
+        },
+        {
+          "id": "6b8dfea0-e5e2-4ed6-af68-a94031c45a9a",
+          "text": "G11: CollectPatient VitalSigns [FALLBACK(G12,G19)]",
+          "type": "istar.Goal",
+          "x": 632,
+          "y": 563
+        },
+        {
+          "id": "f47e7bd3-f3dd-4508-8ad0-0207ed49644e",
+          "text": "G14: Infectious Disease Checking [G15;G16]",
+          "type": "istar.Goal",
+          "x": 491,
+          "y": 821,
+          "customProperties": {
+            "Monitors": "current_room.patient : Patient",
+            "Assert": "current_room.patient.infectious_disease == True"
+          }
+        },
+        {
+          "id": "63a129d8-5435-4d89-b646-a501be61e11e",
+          "text": "G15: Check Infectious Disease Patient",
+          "type": "istar.Goal",
+          "x": 400,
+          "y": 904
+        },
+        {
+          "id": "3ce76695-63e9-4909-9ae4-51419f2bc7af",
+          "text": "G16: Get Sterilized",
+          "type": "istar.Goal",
+          "x": 560,
+          "y": 907
+        },
+        {
+          "id": "cecfaa75-0e71-44ec-91c9-7838a64d8f83",
+          "text": "G17: Diabetes Checking",
+          "type": "istar.Goal",
+          "x": 684,
+          "y": 817,
+          "customProperties": {
+            "Monitors": "current_patient.patient : Patient",
+            "Assert": "current_room.patient.diabetes == True"
+          }
+        },
+        {
+          "id": "0b97e3c2-8da6-4531-b7a4-75ab165231b9",
+          "text": "G18: Post Surgical Checking",
+          "type": "istar.Goal",
+          "x": 842,
+          "y": 811,
+          "customProperties": {
+            "Monitors": "current_room.patient : Patient",
+            "Assert": "current_room.patient.post_surgical == True"
+          }
+        },
+        {
+          "id": "0e5ea154-5b31-45a0-a0bf-1a73d486a0e9",
+          "text": "G19: Alert Staff Of Failure",
+          "type": "istar.Goal",
+          "x": 1025,
+          "y": 682
+        },
+        {
+          "id": "3a8d31b6-85e4-4793-a016-abc660f34fac",
+          "text": "G20: Assign Other Robots",
+          "type": "istar.Goal",
+          "x": 656,
+          "y": 214,
+          "customProperties": {
+            "Assert": "battery_level <= estimated_battery",
+            "Monitors": "battery_level : Real, estimated_battery"
+          }
+        },
+        {
+          "id": "4419a87a-75a1-4bd8-bb23-0aa773e98760",
+          "text": "G21: Warn About Low Battery",
+          "type": "istar.Goal",
+          "x": 656,
+          "y": 297,
+          "customProperties": {
+            "GoalType": "Trigger",
+            "TriggeredEvent": "Low_Battery"
+          }
+        },
+        {
+          "id": "69095502-1a62-428b-a2ed-40cf9bf8a5d2",
+          "text": "G5: VisitAllOc cupiedRooms[G6;G7]",
+          "type": "istar.Goal",
+          "x": 425,
+          "y": 374
+        },
+        {
+          "id": "0e1fee8b-a297-4341-aaca-befe7fdf0503",
+          "text": "G7: Check All Patients [G8;G9;G10;G11]",
+          "type": "istar.Goal",
+          "x": 423,
+          "y": 474,
+          "customProperties": {
+            "Monitors": "path",
+            "Controls": "current_room : Room,visited_rooms : Sequence(Rooms)",
+            "GoalType": "Loop",
+            "IterationRule": "path->iterate(current_room;visited_rooms={} | visited_rooms->including(current_room))"
+          }
+        },
+        {
+          "id": "5e37efa2-eca5-493c-8086-af76561a4b1d",
+          "text": "AT5: Check Diabetes",
+          "type": "istar.Task",
+          "x": 681,
+          "y": 910
+        },
+        {
+          "id": "8672dc58-25a4-4b3a-9df1-12e1597a5517",
+          "text": "G12: Measure Patient VitalSigns [G14|G17|G18]",
+          "type": "istar.Goal",
+          "x": 630,
+          "y": 687
+        },
+        {
+          "id": "3704e0dc-cde8-4942-8276-56f20fbc58c7",
+          "text": "AT6: Check PostSurgical",
+          "type": "istar.Task",
+          "x": 839,
+          "y": 912
+        },
+        {
+          "id": "17e2740e-570a-4b50-bd5d-a452ea0ed404",
+          "text": "T1: PathPlanning",
+          "type": "istar.Task",
+          "x": 88,
+          "y": 502
+        },
+        {
+          "id": "0317f90d-1222-480c-a867-2bc9087b4788",
+          "text": "PathPlanner",
+          "type": "istar.Resource",
+          "x": 22,
+          "y": 577
+        },
+        {
+          "id": "69db2c6e-5579-4e13-beaf-6aee66d717dd",
+          "text": "Presence Sensor",
+          "type": "istar.Resource",
+          "x": 311,
+          "y": 762
+        },
+        {
+          "id": "cce44f6c-fdd0-413b-983a-15fdf19c52b6",
+          "text": "T2: Sense Patient Presence",
+          "type": "istar.Task",
+          "x": 325,
+          "y": 680
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "links": [
+    {
+      "id": "157dce34-6750-4ee7-8652-a48e2f3cd16d",
+      "type": "istar.OrRefinementLink",
+      "source": "f834f34a-9be5-47d2-977b-61c12b804a5c",
+      "target": "ce4a46c4-7760-41e3-b438-a879194f8088"
+    },
+    {
+      "id": "eff403b8-1349-4153-905f-7786084e32e1",
+      "type": "istar.AndRefinementLink",
+      "source": "37db8896-ec12-4aa1-ad5f-07ab49dc7ed9",
+      "target": "f834f34a-9be5-47d2-977b-61c12b804a5c"
+    },
+    {
+      "id": "60fb972f-77fa-4320-8195-3b828ebb05cd",
+      "type": "istar.AndRefinementLink",
+      "source": "8c9ce9a0-50a5-41ca-9f4e-02818f97f70a",
+      "target": "f834f34a-9be5-47d2-977b-61c12b804a5c"
+    },
+    {
+      "id": "83758fe0-bf4c-4cd2-989e-5f66d13f65d1",
+      "type": "istar.AndRefinementLink",
+      "source": "67672a79-9368-407c-b815-194c6d03dc6e",
+      "target": "998bbef6-4762-40ed-bebd-45c5c3bef057"
+    },
+    {
+      "id": "2c6145c4-73fb-4085-a57d-59809501714e",
+      "type": "istar.AndRefinementLink",
+      "source": "ae5f2f70-5107-40f3-9b47-7d173255f172",
+      "target": "a75c534c-cd3e-4649-829c-670045531a69"
+    },
+    {
+      "id": "163029df-983b-47de-8d41-18e05be26c4d",
+      "type": "istar.AndRefinementLink",
+      "source": "63a129d8-5435-4d89-b646-a501be61e11e",
+      "target": "f47e7bd3-f3dd-4508-8ad0-0207ed49644e"
+    },
+    {
+      "id": "ffef1f61-4648-4fcf-bff6-f32f0f941794",
+      "type": "istar.AndRefinementLink",
+      "source": "c1f9ed63-b6c9-4b6f-852a-31d21eb7abd3",
+      "target": "63a129d8-5435-4d89-b646-a501be61e11e"
+    },
+    {
+      "id": "e40f803e-c17d-4cc7-a3c0-55e8e8d5976f",
+      "type": "istar.AndRefinementLink",
+      "source": "dc017184-a7e5-4e3e-a330-d31ddddc4d4b",
+      "target": "3ce76695-63e9-4909-9ae4-51419f2bc7af"
+    },
+    {
+      "id": "59da9b04-ad96-43dc-a292-04af33b67d9f",
+      "type": "istar.AndRefinementLink",
+      "source": "3ce76695-63e9-4909-9ae4-51419f2bc7af",
+      "target": "f47e7bd3-f3dd-4508-8ad0-0207ed49644e"
+    },
+    {
+      "id": "5d6f3d95-2f9f-4bfe-b448-2fba631cad82",
+      "type": "istar.AndRefinementLink",
+      "source": "0e5ea154-5b31-45a0-a0bf-1a73d486a0e9",
+      "target": "6b8dfea0-e5e2-4ed6-af68-a94031c45a9a"
+    },
+    {
+      "id": "e2cb1e59-8cab-406d-bada-a25debcef504",
+      "type": "istar.AndRefinementLink",
+      "source": "94269d29-acd6-4b93-baec-6834763a998a",
+      "target": "0e5ea154-5b31-45a0-a0bf-1a73d486a0e9"
+    },
+    {
+      "id": "8694267b-0480-4c39-8cee-698414b11e7c",
+      "type": "istar.OrRefinementLink",
+      "source": "3a8d31b6-85e4-4793-a016-abc660f34fac",
+      "target": "ce4a46c4-7760-41e3-b438-a879194f8088"
+    },
+    {
+      "id": "96b4c3a3-b273-4382-b28c-c492171c71fb",
+      "type": "istar.AndRefinementLink",
+      "source": "4419a87a-75a1-4bd8-bb23-0aa773e98760",
+      "target": "3a8d31b6-85e4-4793-a016-abc660f34fac"
+    },
+    {
+      "id": "ca441c68-d832-4542-9c3c-1510a8b109c6",
+      "type": "istar.AndRefinementLink",
+      "source": "d1d517b9-65b4-4843-b8bc-5755477bdbbe",
+      "target": "69095502-1a62-428b-a2ed-40cf9bf8a5d2"
+    },
+    {
+      "id": "f7f1c692-1e7e-494a-a9c0-60a6cf220a92",
+      "type": "istar.AndRefinementLink",
+      "source": "69095502-1a62-428b-a2ed-40cf9bf8a5d2",
+      "target": "8c9ce9a0-50a5-41ca-9f4e-02818f97f70a"
+    },
+    {
+      "id": "c4441ac4-4972-4cf9-884c-a4541a4b1306",
+      "type": "istar.AndRefinementLink",
+      "source": "0e1fee8b-a297-4341-aaca-befe7fdf0503",
+      "target": "69095502-1a62-428b-a2ed-40cf9bf8a5d2"
+    },
+    {
+      "id": "de9c24d5-7c7f-46db-abc2-30460e250a9e",
+      "type": "istar.AndRefinementLink",
+      "source": "998bbef6-4762-40ed-bebd-45c5c3bef057",
+      "target": "0e1fee8b-a297-4341-aaca-befe7fdf0503"
+    },
+    {
+      "id": "34405f18-cbe7-4cdc-a40d-e295247160e9",
+      "type": "istar.AndRefinementLink",
+      "source": "38bea37c-6be7-42a7-894d-938969114667",
+      "target": "0e1fee8b-a297-4341-aaca-befe7fdf0503"
+    },
+    {
+      "id": "07430806-f059-4317-b5d2-707e07083f42",
+      "type": "istar.AndRefinementLink",
+      "source": "a75c534c-cd3e-4649-829c-670045531a69",
+      "target": "0e1fee8b-a297-4341-aaca-befe7fdf0503"
+    },
+    {
+      "id": "14fe4b8c-bea1-4065-97f0-d7e4661f3ed4",
+      "type": "istar.AndRefinementLink",
+      "source": "6b8dfea0-e5e2-4ed6-af68-a94031c45a9a",
+      "target": "0e1fee8b-a297-4341-aaca-befe7fdf0503"
+    },
+    {
+      "id": "adbc9015-3dbb-4d17-8454-a5d943b31890",
+      "type": "istar.AndRefinementLink",
+      "source": "5e37efa2-eca5-493c-8086-af76561a4b1d",
+      "target": "cecfaa75-0e71-44ec-91c9-7838a64d8f83"
+    },
+    {
+      "id": "d758a576-635d-4eef-96f1-720a22446578",
+      "type": "istar.AndRefinementLink",
+      "source": "8672dc58-25a4-4b3a-9df1-12e1597a5517",
+      "target": "6b8dfea0-e5e2-4ed6-af68-a94031c45a9a"
+    },
+    {
+      "id": "b595529c-a142-4c8f-a251-b48dd02bcd66",
+      "type": "istar.OrRefinementLink",
+      "source": "f47e7bd3-f3dd-4508-8ad0-0207ed49644e",
+      "target": "8672dc58-25a4-4b3a-9df1-12e1597a5517"
+    },
+    {
+      "id": "91cc9ab2-4522-4d7b-9b6a-d4c7f72130c4",
+      "type": "istar.OrRefinementLink",
+      "source": "cecfaa75-0e71-44ec-91c9-7838a64d8f83",
+      "target": "8672dc58-25a4-4b3a-9df1-12e1597a5517"
+    },
+    {
+      "id": "c74646f1-fa32-4925-a646-ad54d5d64982",
+      "type": "istar.OrRefinementLink",
+      "source": "0b97e3c2-8da6-4531-b7a4-75ab165231b9",
+      "target": "8672dc58-25a4-4b3a-9df1-12e1597a5517"
+    },
+    {
+      "id": "a37a5e09-adc3-45f7-b338-f08c518b0a08",
+      "type": "istar.AndRefinementLink",
+      "source": "3704e0dc-cde8-4942-8276-56f20fbc58c7",
+      "target": "0b97e3c2-8da6-4531-b7a4-75ab165231b9"
+    },
+    {
+      "id": "eb720ed1-47fe-46ae-b8fa-3c8f138653d6",
+      "type": "istar.AndRefinementLink",
+      "source": "17e2740e-570a-4b50-bd5d-a452ea0ed404",
+      "target": "d1d517b9-65b4-4843-b8bc-5755477bdbbe"
+    },
+    {
+      "id": "74504cfd-96ec-460a-8a8f-9bae502e9900",
+      "type": "istar.NeededByLink",
+      "source": "0317f90d-1222-480c-a867-2bc9087b4788",
+      "target": "17e2740e-570a-4b50-bd5d-a452ea0ed404"
+    },
+    {
+      "id": "78c1c751-8fc0-41ea-b46c-236d99b1bb56",
+      "type": "istar.AndRefinementLink",
+      "source": "cce44f6c-fdd0-413b-983a-15fdf19c52b6",
+      "target": "38bea37c-6be7-42a7-894d-938969114667"
+    },
+    {
+      "id": "93d1f5fa-9074-4696-8d1a-321925162e12",
+      "type": "istar.NeededByLink",
+      "source": "69db2c6e-5579-4e13-beaf-6aee66d717dd",
+      "target": "cce44f6c-fdd0-413b-983a-15fdf19c52b6"
+    }
+  ],
+  "tool": "pistar.1.0.0",
+  "istar": "2.0",
+  "saveDate": "Tue, 22 Sep 2020 23:59:57 GMT",
+  "diagram": {
+    "width": 2232,
+    "height": 1172
+  }
+}
