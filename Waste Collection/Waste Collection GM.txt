@@ -1,0 +1,255 @@
+{
+  "actors": [
+    {
+      "id": "433defe7-ad8d-46dd-b7a7-b6b122a39373",
+      "text": "M1: Waste Collection",
+      "type": "istar.Actor",
+      "x": 204,
+      "y": 265,
+      "nodes": [
+        {
+          "id": "766c1646-73c4-4e18-9af1-cae3a00f03c6",
+          "text": "G1: CollectWaste",
+          "type": "istar.Goal",
+          "x": 573,
+          "y": 290,
+          "customProperties": {}
+        },
+        {
+          "id": "69927b32-158f-41fd-aa07-1887f5e1d7e5",
+          "text": "AT1: Collect WasteFromBi n",
+          "type": "istar.Task",
+          "x": 564,
+          "y": 747
+        },
+        {
+          "id": "dbec1b7b-a949-470f-8d6f-5896f9b4b987",
+          "text": "AT2: Collect WasteFromBi n",
+          "type": "istar.Task",
+          "x": 915,
+          "y": 757
+        },
+        {
+          "id": "eddde852-ade9-4466-a332-99cd38a45cc8",
+          "text": "G2: Fetch All Regions",
+          "type": "istar.Goal",
+          "x": 423,
+          "y": 408,
+          "customProperties": {
+            "GoalType": "Query",
+            "Controls": "regions : Sequence(Region)"
+          }
+        },
+        {
+          "id": "09930706-2bb1-447e-9984-e8b91bbfc4ff",
+          "text": "G3: Collect Waste From All Regions",
+          "type": "istar.Goal",
+          "x": 674,
+          "y": 407,
+          "customProperties": {
+            "GoalType": "Achieve",
+            "AchieveCondition": "regions->forAll(current_region | current_region.waste_collected)",
+            "Monitors": "regions",
+            "Deadline": "T : Real",
+            "Controls": "current_region"
+          }
+        },
+        {
+          "id": "165d0c0b-059d-4df6-803a-0a153f092e05",
+          "text": "G4:Collect Waste From Region [G5;OPT(G8)]",
+          "type": "istar.Goal",
+          "x": 673,
+          "y": 492,
+          "customProperties": {
+            "Monitors": "current_region : Region"
+          }
+        },
+        {
+          "id": "967f3f43-0b6b-4484-acf3-2cb22d1f88aa",
+          "text": "G5: Collect General Waste [G6;G7]",
+          "type": "istar.Goal",
+          "x": 521,
+          "y": 567
+        },
+        {
+          "id": "678c8b01-e245-4532-9dc7-00106ecf245a",
+          "text": "G6: Plan Path",
+          "type": "istar.Goal",
+          "x": 399,
+          "y": 653,
+          "customProperties": {
+            "Monitors": "current_region.general_waste_bins",
+            "Controls": "g_path : Sequence(Location)",
+            "GoalType": "Query"
+          }
+        },
+        {
+          "id": "4d78c54f-a4f0-475f-93b8-2dcf0d10ab3f",
+          "text": "G8: Collect Recyclable Waste [G9;G10]",
+          "type": "istar.Goal",
+          "x": 845,
+          "y": 575
+        },
+        {
+          "id": "77507a4f-6a74-43ba-853b-1c1bb9506b5f",
+          "text": "G9: Plan Path",
+          "type": "istar.Goal",
+          "x": 729,
+          "y": 661,
+          "customProperties": {
+            "Monitors": "current_region.recyclable_waste_bins",
+            "Controls": "r_path : Sequence(Location)",
+            "GoalType": "Query"
+          }
+        },
+        {
+          "id": "dda76ff8-9a78-4810-9583-80107f8393ea",
+          "text": "G7: General Waste Collection",
+          "type": "istar.Goal",
+          "x": 566,
+          "y": 660,
+          "customProperties": {
+            "Monitors": "g_path",
+            "GoalType": "Loop",
+            "IterationRule": "g_path->iterate(g;visited_g={} | visited_g->including(g))",
+            "Controls": "visited_g : Sequence(Location)"
+          }
+        },
+        {
+          "id": "223eba47-199e-4b21-b55b-d39314639e2c",
+          "text": "G10: Recyclable Waste Collection",
+          "type": "istar.Goal",
+          "x": 915,
+          "y": 657,
+          "customProperties": {
+            "Monitors": "r_path",
+            "GoalType": "Loop",
+            "IterationRule": "r_path->iterate(r;visited_r={} | visited_r->including(r))",
+            "Controls": "visited_r : Sequence(Location)"
+          }
+        },
+        {
+          "id": "5936e402-5e4b-4655-9897-3cba1ca7986a",
+          "text": "T1: PathPlanning",
+          "type": "istar.Task",
+          "x": 393,
+          "y": 737
+        },
+        {
+          "id": "6ed4d1d6-80b7-483b-b757-b52a05b654dd",
+          "text": "T2: PathPlanning",
+          "type": "istar.Task",
+          "x": 722,
+          "y": 746
+        },
+        {
+          "id": "b7bbd5c5-0570-412c-898c-d234b6ccd42e",
+          "text": "PathPlanner",
+          "type": "istar.Resource",
+          "x": 295,
+          "y": 926
+        }
+      ]
+    }
+  ],
+  "dependencies": [],
+  "links": [
+    {
+      "id": "1bcc3f76-5375-4187-8c34-40e643b4c73a",
+      "type": "istar.AndRefinementLink",
+      "source": "eddde852-ade9-4466-a332-99cd38a45cc8",
+      "target": "766c1646-73c4-4e18-9af1-cae3a00f03c6"
+    },
+    {
+      "id": "7854e708-d767-451e-bd47-6ab8d18422fe",
+      "type": "istar.AndRefinementLink",
+      "source": "09930706-2bb1-447e-9984-e8b91bbfc4ff",
+      "target": "766c1646-73c4-4e18-9af1-cae3a00f03c6"
+    },
+    {
+      "id": "642ec987-eb18-4fb4-8a3a-8f350a629241",
+      "type": "istar.AndRefinementLink",
+      "source": "165d0c0b-059d-4df6-803a-0a153f092e05",
+      "target": "09930706-2bb1-447e-9984-e8b91bbfc4ff"
+    },
+    {
+      "id": "32cc0f10-0b80-4d03-8462-00eaaf4bcb8d",
+      "type": "istar.AndRefinementLink",
+      "source": "967f3f43-0b6b-4484-acf3-2cb22d1f88aa",
+      "target": "165d0c0b-059d-4df6-803a-0a153f092e05"
+    },
+    {
+      "id": "5d062bd9-db22-4759-b289-409c9cd1668c",
+      "type": "istar.AndRefinementLink",
+      "source": "678c8b01-e245-4532-9dc7-00106ecf245a",
+      "target": "967f3f43-0b6b-4484-acf3-2cb22d1f88aa"
+    },
+    {
+      "id": "a9bbc65b-a99b-42d1-a9cf-8e51cb9b6ba2",
+      "type": "istar.AndRefinementLink",
+      "source": "4d78c54f-a4f0-475f-93b8-2dcf0d10ab3f",
+      "target": "165d0c0b-059d-4df6-803a-0a153f092e05"
+    },
+    {
+      "id": "9c16f10a-bdf4-41cd-84e2-1357f797f732",
+      "type": "istar.AndRefinementLink",
+      "source": "77507a4f-6a74-43ba-853b-1c1bb9506b5f",
+      "target": "4d78c54f-a4f0-475f-93b8-2dcf0d10ab3f"
+    },
+    {
+      "id": "80f5a9a6-8676-47fc-aecf-85122a5b56be",
+      "type": "istar.AndRefinementLink",
+      "source": "dda76ff8-9a78-4810-9583-80107f8393ea",
+      "target": "967f3f43-0b6b-4484-acf3-2cb22d1f88aa"
+    },
+    {
+      "id": "55f9b538-02f8-4867-bb03-948a7dbf8685",
+      "type": "istar.AndRefinementLink",
+      "source": "69927b32-158f-41fd-aa07-1887f5e1d7e5",
+      "target": "dda76ff8-9a78-4810-9583-80107f8393ea"
+    },
+    {
+      "id": "587ea2ca-f58a-43ab-8c71-1b87f866c457",
+      "type": "istar.AndRefinementLink",
+      "source": "223eba47-199e-4b21-b55b-d39314639e2c",
+      "target": "4d78c54f-a4f0-475f-93b8-2dcf0d10ab3f"
+    },
+    {
+      "id": "658173db-395f-47a7-b687-8e3c4364ef0b",
+      "type": "istar.AndRefinementLink",
+      "source": "dbec1b7b-a949-470f-8d6f-5896f9b4b987",
+      "target": "223eba47-199e-4b21-b55b-d39314639e2c"
+    },
+    {
+      "id": "9a48d334-72a7-44a5-9ee1-58591d4322e4",
+      "type": "istar.AndRefinementLink",
+      "source": "5936e402-5e4b-4655-9897-3cba1ca7986a",
+      "target": "678c8b01-e245-4532-9dc7-00106ecf245a"
+    },
+    {
+      "id": "a9a29f80-6d3a-4f42-ab33-717cae22cf07",
+      "type": "istar.AndRefinementLink",
+      "source": "6ed4d1d6-80b7-483b-b757-b52a05b654dd",
+      "target": "77507a4f-6a74-43ba-853b-1c1bb9506b5f"
+    },
+    {
+      "id": "f9b58baa-bc7b-479e-9da9-003b33f40e1b",
+      "type": "istar.NeededByLink",
+      "source": "b7bbd5c5-0570-412c-898c-d234b6ccd42e",
+      "target": "5936e402-5e4b-4655-9897-3cba1ca7986a"
+    },
+    {
+      "id": "ba994711-9daf-42d0-86ed-5376052bc582",
+      "type": "istar.NeededByLink",
+      "source": "b7bbd5c5-0570-412c-898c-d234b6ccd42e",
+      "target": "6ed4d1d6-80b7-483b-b757-b52a05b654dd"
+    }
+  ],
+  "tool": "pistar.1.0.0",
+  "istar": "2.0",
+  "saveDate": "Wed, 30 Sep 2020 14:20:30 GMT",
+  "diagram": {
+    "width": 2232,
+    "height": 1172
+  }
+}
